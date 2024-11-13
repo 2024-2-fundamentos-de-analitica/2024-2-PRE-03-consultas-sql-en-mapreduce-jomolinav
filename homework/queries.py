@@ -55,7 +55,7 @@ def reducer_query_2(sequence):
     """Reducer"""
     return sequence
 
-#jajsdas
+
 #
 # SELECT *
 # FROM tips
@@ -102,6 +102,42 @@ def reducer_query_4(sequence):
     return sequence
 
 
+def mapper_query_5(sequence):
+    """Mapper"""
+    result = []
+    for index, (_, row) in enumerate(sequence):
+        if index == 0:
+            continue
+        row_values = row.strip().split(",")
+        result.append((row_values[2], 1))
+    return result
+
+
+def reducer_query_4(sequence):
+    """Reducer"""
+    return sequence
+
+def mapper_query_5(sequence):
+    """Mapper"""
+    result = []
+    for index, (_, row) in enumerate(sequence):
+        if index == 0:
+            continue
+        row_values = row.strip().split(",")
+        result.append((row_values[2], 1))
+    return result
+
+
+def reducer_query_5(sequence):
+    """Reducer"""
+    counter = dict()
+    for key, value in sequence:
+        if key not in counter:
+            counter[key] = 0
+        counter[key] += value
+    return list(counter.items())
+
+
 #
 # ORQUESTADOR:
 #
@@ -136,9 +172,13 @@ def run():
         output_directory="files/query_4",
     )
 
+    run_mapreduce_job(
+        mapper=mapper_query_5,
+        reducer=reducer_query_5,
+        input_directory="files/input",
+        output_directory="files/query_5",
+    )    
+
 if __name__ == "__main__":
-
-    run()
-
 
     run()
