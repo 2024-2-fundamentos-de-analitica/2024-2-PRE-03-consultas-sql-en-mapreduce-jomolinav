@@ -3,26 +3,42 @@
 # pylint: disable=broad-exception-raised
 # pylint: disable=import-error
 
-from mapreduce import run_mapreduce_job as run_mapreduce_job
+from mapreduce import run_mapreduce_job  # type: ignore
 
+#
+# Columns:
+# total_bill, tip, sex, smoker, day, time, size
+#
+
+#
+# SELECT *, tip/total_bill as tip_rate
+# FROM tips;
+#
 def mapper_query_1(sequence):
-    result=[]
+    """Mapper"""
+    result = []
     for index, (_, row) in enumerate(sequence):
         if index == 0:
             result.append((index, row.strip() + ",tip_rate"))
         else:
-            row_values = row.strip().split(".")
+            row_values = row.strip().split(",")
             total_bill = float(row_values[0])
             tip = float(row_values[1])
             tip_rate = tip / total_bill
             result.append((index, row.strip() + "," + str(tip_rate)))
-        return result
-    
+    return result
+
 
 def reducer_query_1(sequence):
     """Reducer"""
     return sequence
 
+
+#
+# SELECT *
+# FROM tips
+# WHERE time = 'Dinner';
+#
 def mapper_query_2(sequence):
     """Mapper"""
     result = []
@@ -39,12 +55,17 @@ def reducer_query_2(sequence):
     """Reducer"""
     return sequence
 
-  
+
+#
+# SELECT *
+# FROM tips
+# WHERE time = 'Dinner' AND tip > 5.00;
+#
 def mapper_query_3(sequence):
     """Mapper"""
     result = []
     for index, (_, row) in enumerate(sequence):
-        if inde == 0:
+        if index == 0:
             result.append((index, row.strip()))
         else:
             row_values = row.strip().split(",")
@@ -58,6 +79,11 @@ def reducer_query_3(sequence):
     return sequence
 
 
+#
+# SELECT *
+# FROM tips
+# WHERE size >= 5 OR total_bill > 45;
+#
 def mapper_query_4(sequence):
     """Mapper"""
     result = []
@@ -76,6 +102,11 @@ def reducer_query_4(sequence):
     return sequence
 
 
+#
+# SELECT sex, count(*)
+# FROM tips
+# GROUP BY sex;
+#
 def mapper_query_5(sequence):
       """Mapper"""
       result = []
@@ -109,13 +140,14 @@ def run():
         input_directory="files/input",
         output_directory="files/query_1",
     )
+
     run_mapreduce_job(
         mapper=mapper_query_2,
         reducer=reducer_query_2,
         input_directory="files/input",
-        output_directory=
-        "files/query_2",
+        output_directory="files/query_2",
     )
+
     run_mapreduce_job(
         mapper=mapper_query_3,
         reducer=reducer_query_3,
@@ -136,7 +168,7 @@ def run():
         input_directory="files/input",
         output_directory="files/query_5",
     )    
-    
+
 if __name__ == "__main__":
 
     run()
