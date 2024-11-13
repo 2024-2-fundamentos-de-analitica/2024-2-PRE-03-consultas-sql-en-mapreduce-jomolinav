@@ -55,7 +55,7 @@ def reducer_query_2(sequence):
     """Reducer"""
     return sequence
 
-
+#jajsdas
 #
 # SELECT *
 # FROM tips
